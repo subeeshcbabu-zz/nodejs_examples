@@ -24,12 +24,12 @@ App.use((req, res, next) => {
          */
         // make sure we close down within 30 seconds
         var killtimer = setTimeout(() => {
-          process.exit(1);
+            process.exit(1);
         }, 30000);
         // But don't keep the process open just for that!
         killtimer.unref();
         // stop taking new requests.
-        server.close();
+        req.socket && req.socket.server && req.socket.server.close();
         //Pass the error to any error handler middlewares.
         next(error);
     });
