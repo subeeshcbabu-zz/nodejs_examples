@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/subeeshcbabu/nodejs_examples#readme",
   "dependencies": {
-    "express": "^4.14.1"
+    "express": "^4.14.1",
+    "koa": "^2.2.0"
   }
 }
