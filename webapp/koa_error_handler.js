@@ -3,7 +3,7 @@ const Fs = require('fs');
 const App = new Koa();
 
 //ERROR Handler. Define this middleware first
-//This catches all the sync errors 
+//This catches all the sync errors
 App.use(async function(ctx, next) {
     try {
         //All the following middleware executions are bound to a try/catch block
