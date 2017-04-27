@@ -71,15 +71,6 @@ const requester = (i, path) => {
 
     req.once('socket', (socket) => {
         console.log('SOCKET: Socket allocated');
-        console.log('\n---> Socket');
-        if (keepAliveAgent.freeSockets[servicename]) {
-            console.log(`freeSockets : ${keepAliveAgent.freeSockets[servicename].length}`);
-        }
-        if (keepAliveAgent.sockets[servicename]) {
-            console.log(`sockets : ${(keepAliveAgent.sockets[servicename].length)}`);
-        }
-        console.log('<--- Socket\n');
-
         socket.once('lookup', () => {
             console.log('LOOKUP: lookup done');
         });
