@@ -12,13 +12,13 @@ app.use('/', (req, res, next) => {
 
 app.use('/error', (req, res, next) => {
 
-    requester(i++, 'error');
+    requester(i++, '/error');
     res.status(200).send('Hi from a Node.js express app');
 });
 
 app.use('/close', (req, res, next) => {
 
-    requester(i++, 'remote_close');
+    requester(i++, '/remote_close');
     res.status(200).send('Hi from a Node.js express app');
 });
 
