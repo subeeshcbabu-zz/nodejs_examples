@@ -5,7 +5,7 @@ const app = express();
 var i = 0;
 
 app.get('/favicon.ico', function(req, res) {
-    res.status(204);
+    res.status(204).send('');
 });
 
 app.use('/error', (req, res, next) => {

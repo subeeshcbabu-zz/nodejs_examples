@@ -1,5 +1,6 @@
 const http = require('http');
 const util = require('util');
+const servicename = 'localhost:9000:';
 const keepAliveAgent = new http.Agent({
     keepAlive: true,
     keepAliveMsecs: 1000,
@@ -9,6 +10,23 @@ const keepAliveAgent = new http.Agent({
 
 keepAliveAgent.on('free', (socket) => {
     console.log('FREE: agent socket freed');
+    if (socket._startTimer) {
+        let aliveTime = process.hrtime(socket._startTimer);
+        aliveTime = Math.round((aliveTime[0] * 1e9 + aliveTime[1]) / 1e6)
+        console.log("Socket has been alive for time = ", aliveTime);
+        if (aliveTime > 50000) {
+            console.log("Socket destroyed after alive time = ", aliveTime);
+            socket.destroy();
+            return;
+        }
+    }
+
+    //Destroy the Socket if its been used more than 5 times
+    if (socket._counter > 5) {
+        console.log("Socket destroyed after usage count = ", socket._counter);
+        socket.destroy();
+    }
+
 });
 
 const options = {
@@ -19,7 +37,7 @@ const options = {
   agent: keepAliveAgent
 };
 
-const servicename = 'localhost:9000:';
+
 
 const requester = (i, path) => {
     console.log(' ');
@@ -72,6 +90,9 @@ const requester = (i, path) => {
     req.once('socket', (socket) => {
         if (socket._counter === undefined) {
             socket._counter = 0;
+        }
+        if (socket._startTimer === undefined) {
+            socket._startTimer = process.hrtime();
         }
         socket._counter++;
         console.log('SOCKET: Socket allocated', ' Counter = ', socket._counter);
