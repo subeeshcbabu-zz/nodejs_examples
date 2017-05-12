@@ -32,7 +32,7 @@ const requester = (i, path) => {
         console.log(`sockets : ${(keepAliveAgent.sockets[servicename].length)}`);
     }
     console.log('<--- Before Request\n');
-    console.log('REQUEST: send request');
+    console.log('REQUEST: send request : path = ', path);
     const req = http.request(Object.assign(options, {
         path: path ? path : '/'
     }), (res) => {
@@ -70,13 +70,22 @@ const requester = (i, path) => {
     });
 
     req.once('socket', (socket) => {
-        console.log('SOCKET: Socket allocated');
+        if (socket._counter === undefined) {
+            socket._counter = 0;
+        }
+        socket._counter++;
+        console.log('SOCKET: Socket allocated', ' Counter = ', socket._counter);
+
         socket.once('lookup', () => {
             console.log('LOOKUP: lookup done');
         });
 
         socket.once('connect', () => {
-            console.log('CONNECT: tcp connect done');
+            if (socket._connectcounter === undefined) {
+                socket._connectcounter = 0;
+            }
+            socket._connectcounter++;
+            console.log('CONNECT: tcp connect done', ' Connect Count = ', socket._connectcounter);
         });
 
         socket.once('free', (socket) => {
