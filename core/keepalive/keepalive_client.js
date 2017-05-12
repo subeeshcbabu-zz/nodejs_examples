@@ -8,6 +8,7 @@ const keepAliveAgent = new http.Agent({
     maxFreeSockets: 5
 });
 
+//Not a clean implementation (Only for demonstarting the capabilities)
 keepAliveAgent.on('free', (socket) => {
     console.log('FREE: agent socket freed');
     if (socket._startTimer) {
@@ -16,6 +17,9 @@ keepAliveAgent.on('free', (socket) => {
         console.log("Socket has been alive for time = ", aliveTime);
         if (aliveTime > 50000) {
             console.log("Socket destroyed after alive time = ", aliveTime);
+            //Steps to do before destroy :
+            // 1. make sure the socket is not being used by a request.
+            // 2. Clear the socket from the freeSockets array.
             socket.destroy();
             return;
         }
